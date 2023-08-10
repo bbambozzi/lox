@@ -103,6 +103,20 @@ public class Scanner {
         }
     }
 
+    private void number() {
+        while (isDigit(peek())) {
+            advance();
+        }
+        if (peek() == '.' && isDigit(peekNext())) {
+            advance();
+
+            while (isDigit(peek())) {
+                advance();
+            }
+        }
+        addToken(NUMBER, Double.parseDouble(source.substring(start, current)));
+    }
+
     private void string() {
         while (peek() != '"' && !isAtEnd()) {
             if (peek() == '\n') line++;
