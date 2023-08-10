@@ -133,7 +133,13 @@ public class Scanner {
         while (isAlphaNumeric(peek())) {
             advance();
         }
-        addToken(IDENTIFIER);
+
+        String currentText = source.substring(start, current);
+        TokenType currentType = keywords.get(currentText);
+        if (currentType == null) {
+            currentType = IDENTIFIER;
+        }
+        addToken(currentType);
     }
 
     private void number() {
