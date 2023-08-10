@@ -133,14 +133,18 @@ public class Scanner {
 
 
     private boolean match(char expected) {
-        if (isAtEnd()) return false;
-        if (source.charAt(current) != expected) return false;
+        if (isAtEnd()) {
+            return false;
+        }
+        if (source.charAt(current) != expected){
+            return false;
+        }
         current++;
         return true;
     }
 
     private char peek() {
-        if (!isAtEnd()) return '\0';
+        if (isAtEnd()) return '\0';
         return source.charAt(current);
     }
     private char peekNext() {
