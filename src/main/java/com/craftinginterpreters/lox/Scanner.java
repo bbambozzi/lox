@@ -20,6 +20,8 @@ public class Scanner {
             start = current;
             scanToken();
         }
+        tokens.add(new Token(EOF, "", null, line));
+        return tokens;
     }
 
 
@@ -48,6 +50,22 @@ public class Scanner {
             case '>':
                 addToken(match('=') ? GREATER_EQUAL : GREATER);
                 break;
+            case '/':
+                if (match('/')) {
+                    // A comment goes until the end of the line.
+                    while (peek() != '\n' && !isAtEnd()) advance();
+                } else {
+                    addToken(SLASH);
+                }
+                break;
+            case ' ':
+            case '\r':
+            case '\t':
+                // whitespace
+                break;
+            case '\n':
+                line++;
+                break;
             default:
                     Lox.error(line, "Unexpected Character");
                     break;
@@ -59,6 +77,10 @@ public class Scanner {
         if (source.charAt(current) != expected) return false;
         current++;
         return true;
+    }
+    private char peek() {
+        if (!isAtEnd()) return '\0';
+        return source.charAt(current);
     }
     private boolean isAtEnd() {
         return current >= source.length();
