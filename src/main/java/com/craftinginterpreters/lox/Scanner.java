@@ -10,6 +10,7 @@ import static com.craftinginterpreters.lox.TokenType.*;
 public class Scanner {
 
     private static final Map<String, TokenType> keywords;
+    var x = 3;
 
     static {
         keywords = new HashMap<>();
@@ -55,73 +56,38 @@ public class Scanner {
     private void scanToken() {
         char c = advance();
         switch (c) {
-            case '(':
-                addToken(LEFT_PAREN);
-                break;
-            case ')':
-                addToken(RIGHT_PAREN);
-                break;
-            case '{':
-                addToken(LEFT_BRACE);
-                break;
-            case '}':
-                addToken(RIGHT_BRACE);
-                break;
-            case ',':
-                addToken(COMMA);
-                break;
-            case '.':
-                addToken(DOT);
-                break;
-            case '-':
-                addToken(MINUS);
-                break;
-            case '+':
-                addToken(PLUS);
-                break;
-            case ';':
-                addToken(SEMICOLON);
-                break;
-            case '*':
-                addToken(STAR);
-                break;
-            case '!':
-                addToken(match('=') ? BANG_EQUAL : BANG);
-                break;
-            case '=':
-                addToken(match('=') ? EQUAL_EQUAL : EQUAL);
-                break;
-            case '<':
-                addToken(match('=') ? LESS_EQUAL : LESS);
-                break;
-            case '>':
-                addToken(match('=') ? GREATER_EQUAL : GREATER);
-                break;
-            case '/':
+            case '(' -> addToken(LEFT_PAREN);
+            case ')' -> addToken(RIGHT_PAREN);
+            case '{' -> addToken(LEFT_BRACE);
+            case '}' -> addToken(RIGHT_BRACE);
+            case ',' -> addToken(COMMA);
+            case '.' -> addToken(DOT);
+            case '-' -> addToken(MINUS);
+            case '+' -> addToken(PLUS);
+            case ';' -> addToken(SEMICOLON);
+            case '*' -> addToken(STAR);
+            case '!' -> addToken(match('=') ? BANG_EQUAL : BANG);
+            case '=' -> addToken(match('=') ? EQUAL_EQUAL : EQUAL);
+            case '<' -> addToken(match('=') ? LESS_EQUAL : LESS);
+            case '>' -> addToken(match('=') ? GREATER_EQUAL : GREATER);
+            case '/' -> {
                 if (match('/')) {
                     // A comment goes until the end of the line.
-                    while (peek() != '\n' && !isAtEnd()){
+                    while (peek() != '\n' && !isAtEnd()) {
                         advance();
                     }
-                }  else if (match('*')) {
+                } else if (match('*')) {
                     commentBlock();
-                }
-                else {
+                } else {
                     addToken(SLASH);
                 }
-                break;
-            case ' ':
-            case '\r':
-            case '\t':
-                // whitespace
-                break;
-            case '\n':
-                line++;
-                break;
-            case '"':
-                string();
-                break;
-            default:
+            }
+            case ' ', '\r', '\t' -> {
+            }
+            // whitespace
+            case '\n' -> line++;
+            case '"' -> string();
+            default -> {
                 if (isDigit(c)) {
                     number();
                 } else if (isAlpha(c)) {
@@ -129,7 +95,7 @@ public class Scanner {
                 } else {
                     Lox.error(line, "Unexpected Character");
                 }
-                break;
+            }
         }
     }
 
@@ -219,7 +185,7 @@ public class Scanner {
     }
 
     private boolean isDigit(char c) {
-        // we avoid Character.isDigit() because it has accepts some characters we don't want
+        // we avoid Character.isDigit() because it accepts some characters we don't want
         return c >= '0' && c <= '9';
     }
 
